@@ -8,6 +8,19 @@ function User()
   this.admin    = false;
 }
 
+test('Missing repo throws', function(t) {
+  t.plan(1);
+  var db = new ModelStore();
+  t.throws(function() { db.get(User)(1); });
+});
+
+test('Missing provider fails promise', function(t) {
+  t.plan(1);
+  var db = new ModelStore();
+  db.source(User, { });
+  db.get(User)(3).catch(function() { t.pass('throw'); });
+});
+
 test('basic get', function(t) {
   t.plan(1);
 

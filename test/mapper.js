@@ -86,7 +86,7 @@ test('Input transform', function(t) {
 });
 
 test('Custom input / output transform', function(t) {
-  t.plan(2);
+  t.plan(3);
 
   function T()
   {
@@ -105,12 +105,14 @@ test('Custom input / output transform', function(t) {
     }
   });
 
-  t.deepEqual(
-    m.transformOutput({ n: 'Bob', a: '24' }),
-    { name: 'Bob', age: 24 });
+  var o = m.transformOutput({ n: 'Bob', a: '25' });
+
+  t.deepEqual(o, { name: 'Bob', age: 25 });
+  t.deepEqual(o.constructor, T);
 
   t.deepEqual(
     m.transformInput({ name: 'Bob', age: 24 }),
     { n: 'Bob', a: '24' });
+
 
 });

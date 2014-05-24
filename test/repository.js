@@ -106,3 +106,52 @@ test('Basic sourcing', function(t) {
   m.getAll().then(function(x) { t.deepEqual(x, [OBJ], 'source multi'); });
 
 });
+
+test('Throw on oversource', function(t) {
+  t.plan(1);
+
+  var m = new Repository(function() {});
+
+  m.source({ get: function(id) { } });
+  t.throws(function() { m.source({ get: function(id) { } }); });
+
+});
+
+test('add', function(t) {
+  var methods = ['add', 'fetch', 'update'];
+  t.plan(3 * methods.length);
+
+  function User()
+  {
+    this.id = null;
+    this.name = '';
+  }
+
+  methods.forEach(function(M) {
+    var m = new Repository(User);
+
+    var prov = {};
+    prov[M] = function(item) {
+      t.deepEqual(item, { id: '1', n: 'bob' });
+    };
+    m.source(prov);
+
+    m.use(function(input, output, instance) {
+      if (input) {
+        input.id = ''+instance.id;
+        input.n = ''+instance.name;
+      } else {
+        instance.name = output.n;
+        instance.id = ''+output.id;
+      }
+    });
+
+    m[M]({ id: 1, name: 'bob' }).then(function(user) {
+      t.deepEqual(user, { id: '1', name: 'bob' });
+      t.strictEqual(user.constructor, User);
+    });
+  });
+
+
+});
+
