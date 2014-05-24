@@ -1,0 +1,25 @@
+{
+  "name": "sticky",
+  "version": "0.0.0",
+  "description": "Map model objects across different domains",
+  "author": {
+    "name": "Brandon Valosek",
+    "email": "bvalosek@gmail.com",
+    "url": "http://brandon.is/awesome"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "tape": "^2.13.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bvalosek/sticky.git"
+  }
+}
