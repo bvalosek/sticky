@@ -79,3 +79,14 @@ test('Map output to an array', function(t) {
     .then(function() { return m.getAll(); })
     .then(function(x) { t.deepEqual(x, [123]); });
 });
+
+test('Basic sourcing', function(t) {
+  t.plan(2);
+
+  var m = new MappedRepo();
+  m.source({ get: function() { return 123; }});
+  m.get().then(function(x) { t.strictEqual(x, 123); });
+  m.source({ getAll: function() { return [123]; }});
+  m.getAll().then(function(x) { t.deepEqual(x, [123]); });
+
+});
