@@ -23,6 +23,7 @@
     "url": "git@github.com:bvalosek/sticky.git"
   },
   "dependencies": {
-    "es6-promise": "^1.0.0"
+    "es6-promise": "^1.0.0",
+    "underscore": "^1.6.0"
   }
 }
