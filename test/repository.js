@@ -20,68 +20,76 @@ test('Missing implementations', function(t) {
 });
 
 test('Map output to single', function(t) {
+
+  // Test all the single outout methods
   var methods = ['get', 'add', 'update', 'fetch'];
-  t.plan(4);
+  t.plan(4 * methods.length);
 
   var OBJ = { stuff: 123 };
 
   function T() { }
   var m = new Repository(T);
   var RET;
-  m._get = function() { return RET; };
 
-  // plain value
-  RET = OBJ;
-  m.get()
-    .then(function(x) { t.deepEqual(x, OBJ, 'straight obj'); })
+  methods.forEach(function(M) {
+    m['_' + M] = function() { return RET; };
 
-    // array-ed value
-    .then(function() { RET = [OBJ]; })
-    .then(function() { return m.get(); })
-    .then(function(x) { t.deepEqual(x, OBJ, 'arrayed'); })
+    // plain value
+    RET = OBJ;
+    m[M]()
+      .then(function(x) { t.deepEqual(x, OBJ, 'straight obj'); })
 
-    // Promise for a val
-    .then(function() { RET = Promise.resolve(OBJ); })
-    .then(function() { return m.get(); })
-    .then(function(x) { t.deepEqual(x, OBJ, 'promise'); })
+      // array-ed value
+      .then(function() { RET = [OBJ]; })
+      .then(function() { return m.get(); })
+      .then(function(x) { t.deepEqual(x, OBJ, 'arrayed'); })
 
-    // Promise for an array-ed val
-    .then(function() { RET = Promise.resolve([OBJ]); })
-    .then(function() { return m.get(); })
-    .then(function(x) { t.deepEqual(x, OBJ, 'arrayed promise'); });
+      // Promise for a val
+      .then(function() { RET = Promise.resolve(OBJ); })
+      .then(function() { return m.get(); })
+      .then(function(x) { t.deepEqual(x, OBJ, 'promise'); })
+
+      // Promise for an array-ed val
+      .then(function() { RET = Promise.resolve([OBJ]); })
+      .then(function() { return m.get(); })
+      .then(function(x) { t.deepEqual(x, OBJ, 'arrayed promise'); });
+  });
 
 });
 
 test('Map output to an array', function(t) {
   var methods = ['query', 'getAll'];
-  t.plan(4);
+  t.plan(4 * methods.length);
 
   var OBJ = { stuff: 123 };
 
   function T() { }
   var m = new Repository(T);
   var RET;
-  m._getAll = function() { return RET; };
 
-  // plain value
-  RET = OBJ;
-  m.getAll()
-    .then(function(x) { t.deepEqual(x, [OBJ], 'straight obj'); })
+  methods.forEach(function(M) {
+    m['_' + M] = function() { return RET; };
 
-    // array-ed value
-    .then(function() { RET = [OBJ]; })
-    .then(function() { return m.getAll(); })
-    .then(function(x) { t.deepEqual(x, [OBJ], 'arrayed'); })
+    // plain value
+    RET = OBJ;
+    m[M]()
+      .then(function(x) { t.deepEqual(x, [OBJ], 'straight obj'); })
 
-    // Promise for a val
-    .then(function() { RET = Promise.resolve(OBJ); })
-    .then(function() { return m.getAll(); })
-    .then(function(x) { t.deepEqual(x, [OBJ], 'promise'); })
+      // array-ed value
+      .then(function() { RET = [OBJ]; })
+      .then(function() { return m.getAll(); })
+      .then(function(x) { t.deepEqual(x, [OBJ], 'arrayed'); })
 
-    // Promise for an array-ed val
-    .then(function() { RET = Promise.resolve([OBJ]); })
-    .then(function() { return m.getAll(); })
-    .then(function(x) { t.deepEqual(x, [OBJ], 'arrayed promise'); });
+      // Promise for a val
+      .then(function() { RET = Promise.resolve(OBJ); })
+      .then(function() { return m.getAll(); })
+      .then(function(x) { t.deepEqual(x, [OBJ], 'promise'); })
+
+      // Promise for an array-ed val
+      .then(function() { RET = Promise.resolve([OBJ]); })
+      .then(function() { return m.getAll(); })
+      .then(function(x) { t.deepEqual(x, [OBJ], 'arrayed promise'); });
+  });
 });
 
 test('Basic sourcing', function(t) {
