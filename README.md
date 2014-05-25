@@ -13,11 +13,13 @@ Map model objects across different domains.
 $ npm install sticky
 ```
 
-## Usage
+## Overview
 
+### Sourcing a model repository
 
-## Features
+### CRUD methods / Accessing models
 
+### Using transforms
 
 ## Tern Support
 
