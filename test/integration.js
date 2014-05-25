@@ -10,7 +10,7 @@ function User()
 }
 
 test('keep identity transform', function(t) {
-  t.plan(2);
+  t.plan(3);
 
   var db = new ModelStore();
 
@@ -101,7 +101,7 @@ test('keep identity transform', function(t) {
   baduser.name = 'bad user';
   baduser.age = 30;
   baduser.id = '123';
-  db.add(User)(baduser);
+  t.throws(function() { db.add(User)(baduser); });
 
 
 });
