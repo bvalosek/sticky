@@ -1,6 +1,7 @@
 var test = require('tape');
 
 var ModelStore = require('../lib/ModelStore.js');
+var identityTranform = require('../util/identityTransform.js');
 
 function User()
 {
@@ -10,7 +11,7 @@ function User()
 }
 
 test('keep identity transform', function(t) {
-  t.plan(3);
+  t.plan(6);
 
   var db = new ModelStore();
 
@@ -20,47 +21,35 @@ test('keep identity transform', function(t) {
   var repo = {};
   db.source(User, {
     get: function(id) {
-      console.log('get');
       var m = repo[id];
-      if (!m) throw 'Could not find model';
+      if (!m) throw 'Could not find model id: ' + id;
+      return m;
+    },
+    fetch: function(item) {
+      var m = repo[item.id];
+      if (!m) throw 'Could not find model id: ' + item.id;
       return m;
     },
     add: function(item) {
-      console.log('add');
       item.id = item.id || nextId++;
-      if (repo[item.id]) throw 'Duplicate model id: ' + item.id;
+      if (repo[item.id])
+        throw 'Duplicate model id: ' + item.id;
       repo[item.id] = item;
       return item;
+    },
+    getAll: function() {
+      var ret = [];
+      for (var id in repo) {
+        var item = repo[id];
+        ret.push(item);
+      }
+      return ret;
     }
   });
 
   // Transform that maintains identity -- separate from actual repo since its
   // doing a user-space transform
-  var identityMap = {};
-  db.use(User, function(input, output, instance) {
-    var id;
-    if (output) {
-      id = output.id;
-      if (!id) return;
-
-      if (identityMap[id]) {
-        instance = identityMap[id];
-        return instance;
-      } else {
-        identityMap[id] = instance;
-      }
-    } else {
-      // On first input, populate the identity and ensure we aren't mixing up
-      // the identities of things from the client side
-      id = instance.id;
-      if (!id) return;
-      if (!identityMap[id]) {
-        identityMap[id] = instance;
-      }
-      else if (identityMap[id] !== instance)
-        throw 'Incorrect identity for model id ' + id;
-    }
-  });
+  db.use(User, identityTranform());
 
   // Transform to setup field names -- unaware of identity stuff
   db.use(User, function(input, output, instance) {
@@ -71,7 +60,7 @@ test('keep identity transform', function(t) {
     } else {
       input.n = ''+instance.name;
       input.a = ''+instance.age;
-      input.id = ''+instance.id;
+      input.id = instance.id ? ''+instance.id : null;
     }
   });
 
@@ -82,9 +71,10 @@ test('keep identity transform', function(t) {
   me.age  = 27;
 
   var ret;
-  db.add(User)(me).then(function(me) {
-    ret = me;
-    return db.get(User)(me.id);
+  db.add(User)(me).then(function(me_) {
+    ret = me_;
+    t.strictEqual(me_, me);
+    return db.get(User)(me_.id);
   }).then(function(x) {
     t.strictEqual(x, ret);
   });
@@ -103,5 +93,9 @@ test('keep identity transform', function(t) {
   baduser.id = '123';
   t.throws(function() { db.add(User)(baduser); });
 
+  db.getAll(User)().then(function(users) {
+    t.strictEqual(users[0], me);
+    t.strictEqual(users[1], user1);
+  });
 
 });

@@ -22,6 +22,20 @@
     "type": "git",
     "url": "git@github.com:bvalosek/sticky.git"
   },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/28..canary",
+      "firefox/23..nightly",
+      "safari/5.1..latest",
+      "opera/latest",
+      "opera/next",
+      "iphone/latest",
+      "ipad/latest",
+      "android-browser/latest"
+    ]
+  },
   "dependencies": {
     "es6-promise": "^1.0.0",
     "underscore": "^1.6.0"
