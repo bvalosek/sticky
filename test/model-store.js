@@ -9,9 +9,15 @@ function User()
 }
 
 test('Missing repo throws', function(t) {
-  t.plan(1);
+  t.plan(7);
   var db = new ModelStore();
-  t.throws(function() { db.get(User)(1); });
+  t.throws(function() { db.get(User)(); });
+  t.throws(function() { db.getAll(User)(); });
+  t.throws(function() { db.query(User)(); });
+  t.throws(function() { db.add(User)(); });
+  t.throws(function() { db.remove(User)(); });
+  t.throws(function() { db.update(User)(); });
+  t.throws(function() { db.fetch(User)(); });
 });
 
 test('Missing provider fails promise', function(t) {
