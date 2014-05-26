@@ -97,6 +97,7 @@ PostgresRepo.prototype.add = function(obj)
 
   var n = 0;
   for (var key in obj) {
+    if (key === this.primaryKey) continue;
     if (n++) sql += ', ';
     sql += key;
     values.push(obj[key]);
