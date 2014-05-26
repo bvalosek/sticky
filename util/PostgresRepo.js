@@ -26,6 +26,7 @@ function PostgresRepo(client, table)
 PostgresRepo.prototype.query = function(sql, params)
 {
   var _this = this;
+  console.log(sql, params);
   return new Promise(function(resolve, reject) {
     var opts = {
       text: sql,
@@ -121,9 +122,23 @@ PostgresRepo.prototype.fetch = function()
 /**
  * @return {Promise}
  */
-PostgresRepo.prototype.update = function()
+PostgresRepo.prototype.update = function(item)
 {
-  throw new Error('Not implemented');
+  var sql    = 'UPDATE ' + this.table + ' SET ';
+  var values = [];
+
+  var n = 0;
+  for (var key in item) {
+    if (key === this.primaryKey) continue;
+    if (n++) sql += ', ';
+    values.push(item[key]);
+    sql += key + ' = $' + n;
+  }
+
+  sql += ' WHERE ' + this.primaryKey + ' = $' + (++n);
+  values.push(item[this.primaryKey]);
+  sql += ' RETURNING *';
+  return this.query(sql, values).then(firstOrNull);
 };
 
 /**
@@ -143,21 +158,11 @@ PostgresRepo.prototype._processRow = function(row, fields)
     var field = fields[n];
     var table = field.tableID;
 
-    // Dump the object if we're done
-    var tableChanged = lastTable && lastTable !== table;
-    var lastColumn = n === row.length - 1;
-    if (tableChanged || lastColumn) {
-      objs.push(empty ? null : obj);
-      obj = {};
-      empty = true;
-    }
-
-    if (value !== null)
-      empty = false;
-
     obj[field.name] = value;
     lastTable = table;
   }
+
+  objs.push(obj);
 
   // If we have a multi-object / join query, each row should be an array
   if (objs.length > 1)
