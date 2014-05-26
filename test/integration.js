@@ -1,7 +1,8 @@
 var test = require('tape');
 
-var ModelStore = require('../lib/ModelStore.js');
+var ModelStore       = require('../lib/ModelStore.js');
 var identityTranform = require('../util/identityTransform.js');
+var ObjectRepo       = require('../util/ObjectRepo.js');
 
 function User()
 {
@@ -15,37 +16,8 @@ test('keep identity transform', function(t) {
 
   var db = new ModelStore();
 
-  // Mock a naive repo that uses hash as backing store and fakes a terse server
-  // response format
-  var nextId = 1;
-  var repo = {};
-  db.source(User, {
-    get: function(id) {
-      var m = repo[id];
-      if (!m) throw 'Could not find model id: ' + id;
-      return m;
-    },
-    fetch: function(item) {
-      var m = repo[item.id];
-      if (!m) throw 'Could not find model id: ' + item.id;
-      return m;
-    },
-    add: function(item) {
-      item.id = item.id || nextId++;
-      if (repo[item.id])
-        throw 'Duplicate model id: ' + item.id;
-      repo[item.id] = item;
-      return item;
-    },
-    getAll: function() {
-      var ret = [];
-      for (var id in repo) {
-        var item = repo[id];
-        ret.push(item);
-      }
-      return ret;
-    }
-  });
+  // use a fake store
+  db.source(User, new ObjectRepo());
 
   // Transform that maintains identity -- separate from actual repo since its
   // doing a user-space transform
