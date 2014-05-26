@@ -5,6 +5,8 @@
 
 Map model objects across different domains.
 
+> This library is pre-1.0 and should not be considered stable.
+
 [![browser support](https://ci.testling.com/bvalosek/sticky.png)](https://ci.testling.com/bvalosek/sticky)
 
 ## Installation

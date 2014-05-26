@@ -59,12 +59,12 @@ ObjectRepo.prototype.remove = function(item)
 
 ObjectRepo.prototype.fetch = function(item)
 {
-
+  throw new Error('Not implemented');
 };
 
 ObjectRepo.prototype.update = function(item)
 {
-
+  throw new Error('Not implemented');
 };
 
 
