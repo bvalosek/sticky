@@ -98,7 +98,9 @@ test('Custom input / output transform', function(t) {
   m.use(function(input, output, instance) {
     if (input) {
       input.n = ''+instance.name;
+      delete input.name;
       input.a = ''+instance.age;
+      delete input.age;
     } else {
       instance.name = ''+output.n;
       instance.age = 0|output.a;

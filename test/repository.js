@@ -140,9 +140,11 @@ test('add', function(t) {
       if (input) {
         input.id = ''+instance.id;
         input.n = ''+instance.name;
+        delete input.name;
       } else {
-        instance.name = output.n;
-        instance.id = ''+output.id;
+        output.name = output.n;
+        delete output.n;
+        output.id = ''+output.id;
       }
     });
 
