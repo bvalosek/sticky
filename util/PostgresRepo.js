@@ -26,6 +26,7 @@ function PostgresRepo(client, table)
 PostgresRepo.prototype.query = function(sql, params)
 {
   var _this = this;
+  sql = sql.replace(/@table/g, this.table);
   return new Promise(function(resolve, reject) {
     var opts = {
       text: sql,
