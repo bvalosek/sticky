@@ -1,6 +1,6 @@
 {
   "name": "sticky",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Map model objects across different domains",
   "author": {
     "name": "Brandon Valosek",
