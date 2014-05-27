@@ -57,9 +57,10 @@ test('Some transforms for output', function(t) {
 
   db.use(User, function(input, output, instance) {
     if (output) {
-      instance.admin = output.a === 'true';
-      instance.username = output.u;
-      instance.id = output.id;
+      output.admin = output.a === 'true';
+      delete output.a;
+      output.username = output.u;
+      delete output.u;
     } else {
       input.a = instance.admin ? 'true' : 'false';
       input.u = instance.username;

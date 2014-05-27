@@ -29,8 +29,10 @@ test('Custom output transform', function(t) {
 
   var m = new Mapper(T);
   m.use(function(input, output, instance) {
-    instance.name = output.n;
-    instance.age = 0|output.a;
+    output.name = output.n;
+    output.age = 0|output.a;
+    delete output.n;
+    delete output.a;
   });
 
   var o = m.toSingle({ n: 'Bob', a: '24' });
@@ -102,8 +104,10 @@ test('Custom input / output transform', function(t) {
       input.a = ''+instance.age;
       delete input.age;
     } else {
-      instance.name = ''+output.n;
-      instance.age = 0|output.a;
+      output.name = ''+output.n;
+      delete output.n;
+      output.age = 0|output.a;
+      delete output.a;
     }
   });
 
