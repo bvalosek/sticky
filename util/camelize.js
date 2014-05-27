@@ -1,9 +1,9 @@
-module.exports = removeUnderscores;
+module.exports = camelize;
 
 /**
  * A sticky transform that will change vars_like_this into varsLikeThis.
  */
-function removeUnderscores()
+function camelize()
 {
   return function(input, output)
   {

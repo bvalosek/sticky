@@ -7,6 +7,9 @@ Map model objects across different domains.
 
 > This library is pre-1.0 and should not be considered stable.
 
+> All methods/classes under `util/` are going to be split out into their own
+> modules.
+
 [![browser support](https://ci.testling.com/bvalosek/sticky.png)](https://ci.testling.com/bvalosek/sticky)
 
 ## Installation

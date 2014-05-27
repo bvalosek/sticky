@@ -1,5 +1,5 @@
 var test      = require('tape');
-var transform = require('../util/removeUnderscores.js');
+var transform = require('../util/camelize.js');
 
 
 test('output', function(t) {

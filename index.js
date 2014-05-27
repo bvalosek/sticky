@@ -6,9 +6,9 @@ module.exports = {
   util: {
     ObjectRepo       : require('./util/ObjectRepo.js'),
     PostgresRepo     : require('./util/PostgresRepo.js'),
+    camelize         : require('./util/camelize.js'),
     fieldPicker      : require('./util/fieldPicker.js'),
     identityTranform : require('./util/identityTransform.js'),
-    momentize        : require('./util/momentize.js'),
-    removeUnderscores : require('./util/removeUnderscores.js')
+    momentize        : require('./util/momentize.js')
   }
 };

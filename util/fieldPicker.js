@@ -1,7 +1,7 @@
 module.exports = fieldPicker;
 
 /**
- * Map fields from a provider
+ * Map fields from a provider exclusively
  */
 function fieldPicker(fields)
 {
